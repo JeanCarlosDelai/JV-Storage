@@ -1,0 +1,1 @@
+O teste com blade funcionou

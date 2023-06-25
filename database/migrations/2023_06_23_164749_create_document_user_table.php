@@ -15,7 +15,7 @@ class CreateDocumentUserTable extends Migration
 
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
+            $table->string('permissao', 255)->nullable();
             $table->primary(['document_id', 'user_id']);
         });
     }

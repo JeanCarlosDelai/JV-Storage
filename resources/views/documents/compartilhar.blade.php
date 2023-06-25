@@ -3,7 +3,6 @@
 @section('title', 'Compartilhar Documento')
 
 @section('content')
-<h1>Compartilhar Documento</h1>
 <br>
 <h3>Usuários:</h3>
 <br>
@@ -15,6 +14,16 @@
             @foreach ($usuarios as $usuario)
             <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
             @endforeach
+        </select>
+    </div>
+    <br>
+    <h3>Permissões:</h3>
+    <br>
+    <div class="form-group">
+        <select name="permissao" id="permissao" class="form-control">
+            <option value="visualizar">Visualizar</option>
+            <option value="editar">Visualizar e Editar</option>
+            <option value="editarExcluir">Visualizar e Editar e Excluir</option>
         </select>
     </div>
     <br>

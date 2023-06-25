@@ -18,13 +18,8 @@ class DocumentsController extends Controller
     {
         $userId = Auth::id();
 
-        $lista = Document::where(function ($query) use ($userId) {
-            $query->where('createby', $userId)
-                ->orWhereHas('users', function ($query) use ($userId) {
-                    $query->where('user_id', $userId);
-                });
-        })->get();
-        // dd($lista);
+        $lista = Document::where('createby', $userId)->get();
+
         foreach ($lista as $documento) {
             $documento->is_rich_text = $this->isRichText($documento->nome);
         }
@@ -33,6 +28,39 @@ class DocumentsController extends Controller
             'lista' => $lista,
         ]);
     }
+
+    public function indexAll()
+    {
+        $lista = Document::all();
+
+        foreach ($lista as $documento) {
+            $documento->is_rich_text = $this->isRichText($documento->nome);
+        }
+
+        return view('documents.index', [
+            'lista' => $lista,
+        ]);
+    }
+
+    public function indexShared()
+    {
+        $userId = Auth::id();
+
+        $lista = Document::whereHas('users', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })
+            ->get();
+
+        foreach ($lista as $documento) {
+            $documento->is_rich_text = $this->isRichText($documento->nome);
+        }
+
+        return view('documents.index', [
+            'lista' => $lista,
+        ]);
+    }
+
+
 
 
     public function compartilhar(Document $document)
@@ -47,15 +75,24 @@ class DocumentsController extends Controller
 
     public function compartilharGravar(Request $request, Document $document)
     {
-        $usuarios = $request->input('usuarios'); // Obtém a lista de IDs dos usuários selecionados no formulário de compartilhamento
+        // Verifica se o usuário autenticado é o criador do documento
+        if ($document->createby !== Auth::id()) {
+            return redirect('documents')->with('erro', 'Você não tem permissão para compartilhar este documento.');
+        }
 
-        // Verifica se o ID do usuário autenticado está presente na lista de usuários selecionados
+        $usuarios = $request->input('usuarios'); // Obtém os usuários selecionados no formulário de compartilhamento
+        $permissao = $request->input('permissao'); // Obtém a permissão selecionada no formulário (exemplo: 'visualizar', 'editar', etc.)
+
+        // Verifica se o usuário autenticado está incluído na lista de usuários selecionados
         if (in_array(Auth::id(), $usuarios)) {
             // Remove o ID do usuário autenticado da lista de usuários selecionados
             $usuarios = array_diff($usuarios, [Auth::id()]);
         }
 
-        $document->users()->sync($usuarios); // Atualiza as permissões de compartilhamento para o documento
+        // Salva as permissões de compartilhamento para cada usuário selecionado
+        foreach ($usuarios as $usuario) {
+            $document->users()->syncWithoutDetaching([$usuario => ['permissao' => $permissao]]);
+        }
 
         return redirect('documents')->with('sucesso', 'Documento compartilhado com sucesso 👍');
     }
@@ -122,21 +159,6 @@ class DocumentsController extends Controller
             'conteudo' => $content,
         ]);
     }
-
-    public function editarGravar(DocumentRequest $form)
-    {
-        $dados = $form->validated();
-        $documento = Document::find($dados['id']);
-        $documento->fill($dados);
-
-        if ($this->isRichText($documento->nome)) {
-            $this->saveRichTextFile($documento->nome, $dados['conteudo']);
-        }
-
-        $documento->save();
-        return redirect('documents')->with('sucesso', 'Documento alterado com sucesso 👍');
-    }
-
 
     private function deleteRichTextFile($fileName)
     {

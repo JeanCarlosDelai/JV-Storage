@@ -22,7 +22,7 @@ class Document extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'document_user')->withPivot('permissao');
     }
 
     public function getCanBeEditedAttribute()

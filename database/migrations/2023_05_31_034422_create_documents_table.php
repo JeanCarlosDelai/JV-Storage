@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->string('texto');
+            $table->string('conteudo')->default('sem conteudo');
+            $table->string('path');
             $table->unsignedBigInteger('createby');
-            $table->foreign('createby')->references('id')->on('user');
+            $table->foreign('createby')->references('id')->on('users');
             $table->timestamps();
         });
     }

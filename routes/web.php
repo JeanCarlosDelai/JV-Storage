@@ -11,27 +11,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque')->middleware('auth');
-
-Route::post('/estoque/busca', [EstoqueController::class, 'busca'])->name('estoque.busca');
-
-Route::get('/estoque/adicionar', [EstoqueController::class, 'adicionar'])->name('estoque.adicionar');
-
-Route::post('/estoque/adicionar', [EstoqueController::class, 'adicionarGravar']);
-
-Route::get('/estoque/editar/{estoque}', [EstoqueController::class, 'editar'])->name('estoque.editar');
-
-Route::put('/estoque/adicionar', [EstoqueController::class, 'editarGravar']);
-
-Route::get('/estoque/apagar/{estoque}', [EstoqueController::class, 'apagar'])->name('estoque.apagar');
-
-Route::delete('/estoque/apagar/{estoque}', [EstoqueController::class, 'apagar']);
+// Definir rota "not found"
+Route::fallback(function () {
+    // Aqui você pode retornar uma resposta personalizada para a rota não encontrada
+    return view('notFound'); // Por exemplo, renderizar uma view de erro 404
+});
 
 //Grupo para rotas que comecem com /user
 Route::group(['prefix' => '/user'], function () {
 
-    Route::get('', [UserController::class, 'index'])->name('user');
+    // Route::get('', [UserController::class, 'index'])->name('user');
 
     Route::get('/create', [UserController::class, 'create'])->name('user.create');
 
@@ -44,70 +33,44 @@ Route::group(['prefix' => '/user'], function () {
     Route::get('/logout', [UserController::class, 'logout'])->name('user.logout');
 });
 
-Route::get('/upload', [UploadController::class, 'index'])->name('upload');
+// Rota para buscar view para adicionar uploads
+Route::get('/upload', [UploadController::class, 'index'])->name('upload')->middleware('auth');
 
-Route::post('/upload/save', [UploadController::class, 'save'])->name('upload.save');
-
-
-//Rotas para o editor de texto
-Route::get('/editor', [EditorController::class, 'index'])->name('editor');
-
-Route::post('/documents/save', [EditorController::class, 'save'])->name('editor.save');
+// Adicionar upload
+Route::post('/upload/save', [UploadController::class, 'save'])->name('upload.save')->middleware('auth');
 
 
+// Abrir editor de texto
+Route::get('/editor', [EditorController::class, 'index'])->name('editor')->middleware('auth');
 
-// Rotas para a lista de documentos
+// Adicionar novo texto
+Route::post('/documents/save', [EditorController::class, 'save'])->name('editor.save')->middleware('auth');
+
+
+// Listar documentos do usuário
 Route::get('/documents', [DocumentsController::class, 'index'])->name('documents')->middleware('auth');
 
-// Rota para busca
-Route::post('/documents/busca', [DocumentsController::class, 'busca'])->name('documents.busca');
+// Listar todos os documentos
+Route::get('/documents/all', [DocumentsController::class, 'indexAll'])->name('documents.all')->middleware('auth');
 
-// Editar Documentos
+// Listar todos os documentos comaprtilahdos com o usuário autenticado
+Route::get('/documents/shared', [DocumentsController::class, 'indexShared'])->name('documents.shared')->middleware('auth');
 
-Route::get('/documents/adicionar', [DocumentsController::class, 'adicionar'])->name('documents.adicionar');
+// Buscar documentos
+Route::post('/documents/busca', [DocumentsController::class, 'busca'])->name('documents.busca')->middleware('auth');
 
-Route::post('/documents/adicionar', [DocumentsController::class, 'adicionarGravar']);
+//Editar documentos
+Route::get('/documents/{documento}/edit', [EditorController::class, 'editar'])->name('documents.editar')->middleware('auth');
 
-// Route::get('/documents/editar/{documents}', [DocumentsController::class, 'editar'])->name('documents.editar');
-
-// Route::post('/documents/editar', [DocumentsController::class, 'editarGravar'])->name('documents.editarGravar');
-
-Route::get('/documents/{documento}/edit', [EditorController::class, 'editar'])->name('documents.editar');
-
-Route::post('/documents/{documento}/edit', [EditorController::class, 'editarGravar'])->name('documents.editar');
+Route::post('/documents/{documento}/edit', [EditorController::class, 'editarGravar'])->name('documents.editar')->middleware('auth');
 
 
 // Compartilhar documentos
+Route::get('/documents/compartilhar/{document}', [DocumentsController::class, 'compartilhar'])->name('documents.compartilhar')->middleware('auth');
 
-Route::get('/documents/compartilhar/{document}', [DocumentsController::class, 'compartilhar'])->name('documents.compartilhar');
-Route::post('/documents/compartilhar/{document}', [DocumentsController::class, 'compartilharGravar'])->name('documents.compartilhar.gravar');
-
-
-
-
-// Route::put('/documents/editar/{documents}', [DocumentsController::class, 'editarGravar']);
-
-// Route::put('/documents/editar/', [DocumentsController::class, 'editarGravar']);
-
-
-
-//Talvez usar assim
-// Route::put('/documents/editar/{documents}', [DocumentsController::class, 'editarGravar']);
-
-
+Route::post('/documents/compartilhar/{document}', [DocumentsController::class, 'compartilharGravar'])->name('documents.compartilhar.gravar')->middleware('auth');
 
 // Apagar Documents
-Route::get('/documents/apagar/{document}', [DocumentsController::class, 'apagar'])->name('documents.apagar');
+Route::get('/documents/apagar/{document}', [DocumentsController::class, 'apagar'])->name('documents.apagar')->middleware('auth');
 
-Route::delete('/documents/apagar/{document}', [DocumentsController::class, 'apagar']);
-
-
-// Route::get('/teste', function() {
-//     return 'O teste funcionou';
-// });
-// Route::get('/teste-com-view', function() {
-//     return view('teste');
-// });
-// Route::get('/noticia/{id?}', function($id = 'NADA') {
-//     return "Você está lendo a notícia {$id}";
-// });
+Route::delete('/documents/apagar/{document}', [DocumentsController::class, 'apagar'])->middleware('auth');

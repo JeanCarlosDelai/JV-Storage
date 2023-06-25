@@ -38,7 +38,7 @@ class UserController extends Controller
         //     $msg->to('destinatario@email.com')->subject('Usuário criado com sucesso');
         // });
 
-        return redirect()->route('user');
+        return redirect()->route('user.login');
     }
 
     public function login(Request $data)

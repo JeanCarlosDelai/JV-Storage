@@ -16,7 +16,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </span>
-                <a href="{{ route('documents') }}" class="bg-gray-500 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded">Limpar Busca</a>
+                <a href="{{ route('documents.all') }}" class="bg-gray-500 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded">Limpar Busca</a>
             </div>
         </div>
 
@@ -90,9 +90,5 @@
             @endforeach
         </tbody>
     </table>
-</div>
-
-<div>
-    <a href="{{ route('editor')}}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Adicionar Texto</a>
 </div>
 @endsection

@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Document;
-use Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
 
 class UploadController extends Controller
 {
@@ -19,6 +16,11 @@ class UploadController extends Controller
     public function save(Request $form)
     {
         $arquivo = $form->file('file');
+
+        // Verifica se o arquivo foi enviado
+        if ($arquivo === null) {
+            return redirect('upload')->with('erro', 'Nenhum arquivo foi selecionado.');
+        }
 
         // Validação do tipo de arquivo
         $validExtensions = ['doc', 'docx', 'pdf'];

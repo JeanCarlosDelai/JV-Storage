@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -21,22 +19,24 @@ class UserController extends Controller
         return view('user.create');
     }
 
-    public function createSave(Request $data)
+    public function createSave(Request $request)
     {
-        //Converte os dados para array, pois o create() só recebe array
-        $data = $data->toArray();
+        $validatedData = $request->validate([
+            'name' => 'required|unique:users,name',
+            'email' => 'required|unique:users,email',
+            'password' => 'required',
+        ], [
+            'name.required' => 'O nome é obrigatório.',
+            'name.unique' => 'Este nome de usuário já está em uso.',
+            'email.required' => 'O email é obrigatório.',
+            'email.unique' => 'Este email já está em uso.',
+            'password.required' => 'A senha é obrigatória.',
+        ]);
 
-        //Criptografia de Senha
+        $data = $validatedData;
         $data['password'] = Hash::make($data['password']);
 
-        //$user =
         User::create($data);
-
-        //event(new Registered($user));
-
-        // Mail::raw('Este é um email teste', function($msg) {
-        //     $msg->to('destinatario@email.com')->subject('Usuário criado com sucesso');
-        // });
 
         return redirect()->route('user.login');
     }

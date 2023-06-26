@@ -8,8 +8,6 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
 class DocumentsController extends Controller
@@ -29,7 +27,7 @@ class DocumentsController extends Controller
         ]);
     }
 
-    public function indexAll()
+    public function indexTodos()
     {
         $lista = Document::all();
 
@@ -37,7 +35,7 @@ class DocumentsController extends Controller
             $documento->is_rich_text = $this->isRichText($documento->nome);
         }
 
-        return view('documents.index', [
+        return view('documents.todos', [
             'lista' => $lista,
         ]);
     }
@@ -55,13 +53,23 @@ class DocumentsController extends Controller
             $documento->is_rich_text = $this->isRichText($documento->nome);
         }
 
-        return view('documents.index', [
+        return view('documents.shared', [
             'lista' => $lista,
         ]);
     }
 
+    public function show(Document $document)
+    {
+        $userId = Auth::id();
 
+        $document->load(['users' => function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        }]);
 
+        return view('documents.compartilhar', [
+            'document' => $document,
+        ]);
+    }
 
     public function compartilhar(Document $document)
     {
@@ -94,7 +102,7 @@ class DocumentsController extends Controller
             $document->users()->syncWithoutDetaching([$usuario => ['permissao' => $permissao]]);
         }
 
-        return redirect('documents')->with('sucesso', 'Documento compartilhado com sucesso 👍');
+        return back()->with('sucesso', 'Documento compartilhado com sucesso 👍');
     }
 
 
@@ -107,9 +115,20 @@ class DocumentsController extends Controller
     public function busca(Request $form)
     {
         $busca = $form->busca;
-        $lista = Document::where('nome', 'LIKE', "%{$busca}%")->get();
+        $usuarios = User::where('name', 'LIKE', "%{$busca}%")->get();
+        $usuariosIds = $usuarios->pluck('id');
 
-        return view('documents.index', ['lista' => $lista]);
+        $lista = Document::where(function ($query) use ($busca, $usuariosIds) {
+            $query->where('nome', 'LIKE', "%{$busca}%")
+                ->orWhere('created_at', 'LIKE', "%{$busca}%")
+                ->orWhere('createby', 'LIKE', "%{$busca}%")
+                ->orWhereHas('createByUser', function ($query) use ($usuariosIds) {
+                    $query->whereIn('id', $usuariosIds);
+                });
+        })
+            ->get();
+
+        return view('documents.todos', ['lista' => $lista]);
     }
 
     public function adicionar()

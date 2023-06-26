@@ -20,8 +20,6 @@ Route::fallback(function () {
 //Grupo para rotas que comecem com /user
 Route::group(['prefix' => '/user'], function () {
 
-    // Route::get('', [UserController::class, 'index'])->name('user');
-
     Route::get('/create', [UserController::class, 'create'])->name('user.create');
 
     Route::post('/create', [UserController::class, 'createSave'])->name('createSave');
@@ -51,7 +49,7 @@ Route::post('/documents/save', [EditorController::class, 'save'])->name('editor.
 Route::get('/documents', [DocumentsController::class, 'index'])->name('documents')->middleware('auth');
 
 // Listar todos os documentos
-Route::get('/documents/all', [DocumentsController::class, 'indexAll'])->name('documents.all')->middleware('auth');
+Route::get('/documents/todos', [DocumentsController::class, 'indexTodos'])->name('documents.todos')->middleware('auth');
 
 // Listar todos os documentos comaprtilahdos com o usuário autenticado
 Route::get('/documents/shared', [DocumentsController::class, 'indexShared'])->name('documents.shared')->middleware('auth');

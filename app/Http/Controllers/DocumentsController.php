@@ -106,6 +106,19 @@ class DocumentsController extends Controller
     }
 
 
+
+
+    public function removerPermissao(Document $document, User $user)
+    {
+        $document->users()->detach($user->id);
+
+        return redirect()->back()->with('success', 'Permissão removida com sucesso.');
+    }
+
+
+
+
+
     private function isRichText($fileName)
     {
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);

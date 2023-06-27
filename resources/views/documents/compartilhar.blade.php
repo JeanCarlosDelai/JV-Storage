@@ -68,10 +68,12 @@
                         @endif
                     </h3>
                 </td>
+                <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 border border-purple-300">
+                    <a href="{{ route('documents.removerPermissao', [$document, $user]) }}" class="inline-block right-0 align-baseline font-bold text-sm text-red-700 hover:text-purple-700">Excluir</a>
+                </td>
             </tr>
             @endforeach
         </tbody>
     </table>
 </form>
-
 @endsection

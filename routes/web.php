@@ -70,3 +70,7 @@ Route::post('/documents/compartilhar/{document}', [DocumentsController::class, '
 Route::get('/documents/apagar/{document}', [DocumentsController::class, 'apagar'])->name('documents.apagar')->middleware('auth');
 
 Route::delete('/documents/apagar/{document}', [DocumentsController::class, 'apagar'])->middleware('auth');
+
+//Apagar permissões
+
+Route::get('/documents/compartilhar/{document}/{user}', [DocumentsController::class, 'removerPermissao'])->name('documents.removerPermissao')->middleware('auth');

@@ -20,6 +20,11 @@
 - Compartilhamento de documentos entre os usuários
 - Busca de documentos cadastrados no sistema
 
+## Link video demonstrativo
+
+```sh
+https://drive.google.com/file/d/10aokFW3-XORR3_8O3GIvT3fbN_cvw_M9/view?usp=sharing
+```
 
 ## Instalação
 

@@ -10,7 +10,7 @@
 
         <div class="flex justify-center mt-2 mr-4">
             <div class="relative flex w-full flex-wrap items-stretch mb-3">
-                <label class="mt-2 inline-block right-0 align-baseline font-bold text-sm text-500 hover:text-purple-700">Busca</label>
+                <label class="mt-2 inline-block right-0 align-baseline font-bold text-sm text-500 hover:text-purple-700">Busca por documentos cadastrados no sistema</label>
                 <input type="search" name="busca" placeholder="Digite aqui sua busca" class="mt-2 form-input px-3 py-2 placeholder-gray-400 text-black-700 relative bg-white rounded-lg text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10" />
                 <label class="mt-2 inline-block right-0 align-baseline font-bold text-sm text-500 hover:text-purple-700" for="busca">Filtros</label>
                 <select name="filtro" class="mt-2 form-select px-3 py-2 placeholder-gray-400 text-gray-700 relative bg-white rounded-lg text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full">

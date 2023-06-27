@@ -46,7 +46,8 @@
         <thead>
             <tr>
                 <th class="px-6 py-3  text-xs leading-4 font-medium text-purple-500 tracking-wider text-center border border-purple-300">Usuários</strong></th>
-                <th class="px-6 py-3  text-xs leading-4 font-medium text-purple-500 uppercase tracking-wider text-center border border-purple-300">Permissõeos</th>
+                <th class="px-6 py-3  text-xs leading-4 font-medium text-purple-500 uppercase tracking-wider text-center border border-purple-300">Permissões</th>
+                <th class="px-6 py-3  text-xs leading-4 font-medium text-purple-500 uppercase tracking-wider text-center border border-purple-300">Excluir Permissão</th>
             </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">

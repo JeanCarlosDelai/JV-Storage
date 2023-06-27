@@ -1,7 +1,5 @@
 @extends('base')
 
-@section('title', 'Adicionar novo Documento')
-
 @section('content')
 
 

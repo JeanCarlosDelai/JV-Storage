@@ -51,7 +51,7 @@ class UserController extends Controller
             ]);
 
             if (Auth::attempt($login)) {
-                return redirect()->route('documents');
+                return redirect()->route('documents.todos');
             } else {
                 return redirect()->route('user.login')->with('erro', 'Usuário ou senha inválidos');
             }

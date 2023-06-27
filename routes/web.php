@@ -2,10 +2,8 @@
 
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\EditorController;
-use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
-use Faker\Documentor;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {

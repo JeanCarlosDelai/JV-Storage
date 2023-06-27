@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+    @php
+    @endphp
     <div class="flex flex-row justify-center h-screen">
         <div class="text-center">
             <div class="mx-6 flex py-3 px-2 items-center">

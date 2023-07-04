@@ -31,7 +31,7 @@ https://drive.google.com/file/d/10aokFW3-XORR3_8O3GIvT3fbN_cvw_M9/view?usp=shari
 Clonar o repositório para a máquina local
 
 ```sh
-  git clone https://github.com/JeanCarlosDelai/PROVA-DSI-LARAVEL.git
+  git clone https://github.com/JeanCarlosDelai/JV-Storage.git
 ```
 Acessar a pasta clonada    
 
